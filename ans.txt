@@ -31,6 +31,30 @@ Q5) Project Lead/Front End - Shimra
 Q6) We will be using Django + Flask
 
 
+Full Stack Group Project Track
+
+Track 1:
+Problem 1: Creators’ works (text, art, music) are scraped into AI training sets without consent, leaving artists unable to prove authorship or assert rights when their content is reused by models
+
+Solution 1: Invisible ownership metadata embedded in text, art, or music to help creators prove authorship if AI models misuse their work
 
 
-Q5) 
+Track 2: Technology for Public Goods
+Problem 2:
+
+Solution 2:
+
+Problem 3:
+
+Solution 3:
+
+
+Track 3: Creative Coding and Cultural Expression
+Idea - Story - Inspiration 4: We want to connect people from different cultures via cooking recipes. We aim to provide the origins, stories, and history via each recipe. Sharing recipes from serveral cultures provides a way for people to explore and appreciate diversity
+
+Implementation 4: We build an interactive recipe journey wesite where user can learn recipes from different cultures. Each recipe includes origins, history, and meaning. Possible features are cooking steps, nutrition information, storytelling elements, timers, and cultural quizzes.
+
+Idea - Story - Inspiration 5: We come up with an idea to introduce the history of UIC campus and make an interactive map for students. We want people to rediscover UIC campus in creative ways
+
+Implementation 5: An application that navigate users in UIC campus where users unlock hidden characters or items tied to cultural stories and history. A UIC campus version could include scavenger hunts linked to real events, festivals, or student activities. Users explore locations, complete challenges, and collect digital “stamps” or rewards that guide them through cultural narratives and campus life.
+
