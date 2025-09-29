@@ -61,3 +61,32 @@ Implementation 5: An application that navigate users in UIC campus where users u
 Idea Finalization
 
 With the Google Civic Information API, we can create a platform that informs the user of the current political elections that are coming up at a local, state, and national level. This app would also let people attend and organize canvassing events so that they can be involved in their political party and find others near them that are also aligned. Information on judges, politicians, super pacs, and other political information can be found and communicated through the app. Both politicians and users can use the app to communicate with one another in a privately tailored space. We thought about this idea because current political distrust in the government is at a high right now and it makes sense to bring both politicians and constituents at a common ground.
+
+
+Extra Credit:
+
+Database Design:
+
+1) We are planning on using SQLite for our database. The reason we chose this is because we are already familiar with this database, which would make it easier to navigate.
+2) The database will be helpful to our project because we can use the database to store information about the elections, political parties/figgures, and various other types of information that we need for our application. We will design the database using various tables and features to store the information neatly.
+
+Third-Party API Integration:
+
+3) We will use the Google Civic Information API. We will pull the information regarding politicians, and other events to create an app that helps people understand any upcoming political elections.
+4) There are some limitations such as the free daily query limit being 25,000. If we need more queries, we would have to make a request to be approved, but we don't foresee us surpassing the given limit.
+
+Authentication and Security:
+
+5) We expect to use either username/password, or OAuth.
+6) For now, we plan on implementing a password system.
+
+Deployment:
+
+7: We plan to deploy our project on either Render or AWS. The environment variables and secrets will be stored in the platform's environment config. If not, they will be hidden in the .env file that is going to be in gitignored.
+8) We will make sure deployment is reliable and easy to update by maybe choosing a platform that does automatic restarts like AWS and connecting the deployment to GitHub so that the app redeploys automatically when we push. 
+
+
+
+
+
+
