@@ -40,13 +40,13 @@ Solution 1: Invisible ownership metadata embedded in text, art, or music to help
 
 
 Track 2: Technology for Public Goods
-Problem 2:
+Problem 2: Politics is not always easy, and in a democratic republic, educating oneself about current elections, representatives, and their actions is key. Politicians and their backroom deals to vote against their constituents can ultimately be held accountable.
 
-Solution 2:
+Solution 2: Having an app to track the actions of politicians and officials responsible for you is not always clear. Creating a system where you can see your geopolitical surroundings to know if the people around you align with your party is informative. Educating individuals about the funds that your politicians receive in a clear and concise way is also a goal.
 
-Problem 3:
+Problem 3: If you have a disability and find it hard to take notes in class or understand material at the same rate as others, it can be detrimental to your grade.
 
-Solution 3:
+Solution 3: Creating an app based on the availability and volunteering of individuals who have better access to notes and educational materials can provide assistance online for those items. Creating study guides and even quizzes for people who may always struggle to study can also be posted on this platform.
 
 
 Track 3: Creative Coding and Cultural Expression
@@ -58,3 +58,6 @@ Idea - Story - Inspiration 5: We come up with an idea to introduce the history o
 
 Implementation 5: An application that navigate users in UIC campus where users unlock hidden characters or items tied to cultural stories and history. A UIC campus version could include scavenger hunts linked to real events, festivals, or student activities. Users explore locations, complete challenges, and collect digital “stamps” or rewards that guide them through cultural narratives and campus life.
 
+Idea Finalization
+
+With the Google Civic Information API, we can create a platform that informs the user of the current political elections that are coming up at a local, state, and national level. This app would also let people attend and organize canvassing events so that they can be involved in their political party and find others near them that are also aligned. Information on judges, politicians, super pacs, and other political information can be found and communicated through the app. Both politicians and users can use the app to communicate with one another in a privately tailored space. We thought about this idea because current political distrust in the government is at a high right now and it makes sense to bring both politicians and constituents at a common ground.
