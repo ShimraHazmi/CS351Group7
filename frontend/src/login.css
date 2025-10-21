@@ -520,9 +520,10 @@
 }
 
 .sign-in .icon-2 {
-  height: 32px;
+  height: 23px;
   position: relative;
   width: 32px;
+  left: 5px;
 }
 
 .sign-in .container-5 {

@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // for routing
 import "../login.css"; // your styling (shared stylesheet in src/)
 
+// icon
+import { FiUser, FiClipboard, FiPhoneCall, FiUsers } from "react-icons/fi";
+
 // placeholder images used when actual assets are missing
 import placeholder from "../assets/placeholder.svg";
 
@@ -20,6 +23,7 @@ const vector6 = placeholder;
 
 
 export const SignIn = () => {
+  const navigate = useNavigate();
   return (
     <div className="sign-in">
       <div className="login-screen">
@@ -28,11 +32,7 @@ export const SignIn = () => {
             <div className="app">
               <div className="container">
                 <div className="icon">
-                  <img className="vector" alt="Vector" src={vector} />
-
-                  <img className="img" alt="Vector" src={image} />
-
-                  <img className="vector-2" alt="Vector" src={vector2} />
+                  <FiUser size={24} color="#ffffff" />
                 </div>
               </div>
 
@@ -88,7 +88,7 @@ export const SignIn = () => {
 
         <div className="signin-box">
           <div className="card-footer">
-            <button className="button">
+            <button className="button" onClick={() => navigate('/dashboard')}>
               <div className="text-wrapper-5">Sign in</div>
             </button>
 
@@ -125,13 +125,9 @@ export const SignIn = () => {
       <div className="icon-image">
         <div className="container-4">
           <div className="circle-icon-wrapper">
-            <div className="icon-2">
-              <img className="vector" alt="Vector" src={vector3} />
-
-              <img className="img" alt="Vector" src={vector4} />
-
-              <img className="vector-2" alt="Vector" src={vector5} />
-            </div>
+              <div className="icon-2">
+                <FiClipboard size={20} />
+              </div>
           </div>
 
           <div className="container-5">
@@ -148,7 +144,11 @@ export const SignIn = () => {
         </div>
 
         <div className="container-4">
-          <img className="container-6" alt="Container" src={container} />
+          <div className = "circle-icon-wrapper">
+            <div className="icon-2">
+              <FiPhoneCall size={20} />
+            </div>
+          </div>
 
           <div className="container-5">
             <div className="heading-3">
@@ -166,7 +166,7 @@ export const SignIn = () => {
         <div className="container-7">
           <div className="circle-icon-wrapper">
             <div className="icon-2">
-              <img className="vector-3" alt="Vector" src={vector6} />
+              <FiUsers size={20} />
             </div>
           </div>
 
