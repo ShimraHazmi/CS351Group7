@@ -1,8 +1,10 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiHome, FiMapPin, FiSearch, FiUser, FiInfo, FiPhoneCall, FiLogOut } from "react-icons/fi";
 import "../dashboard.css"; // your styling (shared stylesheet in src/)
 export const Dashboard = () => {
   const [active, setActive] = useState("home");
+  const navigate = useNavigate();
   return (
     <div className="dashboard">
       <aside className="sidebar">
@@ -19,7 +21,7 @@ export const Dashboard = () => {
 
         </nav>
         <div className="spacer"></div>
-        <button className="logout">
+        <button className="logout" onClick={() => navigate('/') }>
           <FiLogOut />
           <span>Log Out</span>
         </button>
