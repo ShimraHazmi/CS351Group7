@@ -17,5 +17,3 @@ For backend, we discussed finishing up these implementations and pushing to gith
 As for github maintenance, we need to set up pull requests whenever we want to merge to main to make sure that there are no conflicts and so that everyone can leave comments and review the merge. To do this, add everyone as reviewers.
 
 Thursday is peer review day, so make sure to be present!
-
-testtestest
