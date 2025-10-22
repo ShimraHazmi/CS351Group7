@@ -2,6 +2,9 @@ import requests
 from django.conf import settings
 from django.shortcuts import render
 from django.http import JsonResponse
+from .trie import Trie
+from django.views.decorators.csrf import csrf_exempt
+from .utils import log_query
 from utils.bloom_filter import BloomFilter
 
 # Create your views here.
@@ -31,6 +34,20 @@ def get_elections(request):
     response = requests.get(url, params=params)
     return JsonResponse(response.json())
 
+def search_view(request):
+    """
+    Handle search queries and log them to file.
+    """
+    query = request.GET.get('q', '').strip()
+    
+    if query:
+        # Log the query to file
+        log_query(query)
+    
+    return JsonResponse({
+        'query': query,
+        'message': 'Query logged successfully'
+    })
 def get_voter_info(request):
     url = "https://www.googleapis.com/civicinfo/v2/voterinfo"
     params = {

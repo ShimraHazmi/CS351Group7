@@ -1,0 +1,30 @@
+The data source is clearly identified and appropriate for the application (5%)
+    We will be using the google civic API because it has useful information about current upcoming elections
+
+The team explains how data will be pulled into the backend (3%)
+    We will be making calls about about election info from the API. The plan is to maybe
+    keep some information from previous calls on the project clearing it every now and then.
+    This is to save on query calls if there is a lot of traffic on some days.
+
+The team describes any necessary data processing or cleaning before use (3%)
+    We have to decide how we want to process and store back what we get from the query. We can maybe store
+    it in a SQL database. or if we just want to store the names for our autocorrecting Trie in a .txt file 
+    and load that file on startup. Both ways save up on calls.
+
+Application has at least one complete advanced data structures (8%)
+    Trie
+
+Explain to the other group how each advanced data structure is used in your application and
+why it is the most appropriate choice (3%)
+    Trie - because human names are hard can be hard to remember and spell correctly, our Trie
+    will autocorrect and match with who some people might be looking
+    Bloom filter - To help determine if we have to make another call to the API or do we 
+    currently already store the information because calls are expensive
+
+Explain to the other group the alternative data structures you considered for each use case
+and why you decided not to use them (3%)
+    We did not think any of the other data structures were suitable for what we had in mind with the project
+    We did consider using a self balancing-tree maybe so that more frequently looked up candidates were at
+    the top, but ultimately we chose the Trie.
+
+    
