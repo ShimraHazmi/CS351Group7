@@ -2,6 +2,11 @@ import requests
 from django.conf import settings
 from django.shortcuts import render
 from django.http import JsonResponse
+from .trie import Trie
+from django.views.decorators.csrf import csrf_exempt
+from .utils import log_query
+
+
 
 # Create your views here.
 
@@ -18,3 +23,18 @@ def get_elections(request):
     # Make the request to the API
     response = requests.get(url, params=params)
     return JsonResponse(response.json())
+
+def search_view(request):
+    """
+    Handle search queries and log them to file.
+    """
+    query = request.GET.get('q', '').strip()
+    
+    if query:
+        # Log the query to file
+        log_query(query)
+    
+    return JsonResponse({
+        'query': query,
+        'message': 'Query logged successfully'
+    })
