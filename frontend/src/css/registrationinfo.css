@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
 }
 
 .regis-info {
@@ -9,7 +10,6 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    margin-top: 40px;
 }
 
 .state-card, .requirements-card, .documents-card {
@@ -23,62 +23,6 @@
     gap: 10px;
 }
 
-.state-dropdown {
-    display: inline-block;
-    margin-top: 16px;
-}
-
-.state-dropdown .dropdown-toggle {
-    background-color: #eeeeee;
-    color: #000;
-    padding: 5px 10px;
-    font-size: 15px;
-    border-radius: 8px;
-    border: 1px solid #000;
-}
-
-.state-dropdown .dropdown-toggle:hover,
-.state-dropdown .dropdown-toggle:focus {
-  background-color: #676779;       /* darker on hover */
-  outline: none;
-}
-
-/* Dropdown menu */
-.state-dropdown .dropdown-menu {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 6px 0;
-  min-width: 200px;
-  overflow-y: auto;
-  max-height: 300px;
-}
-
-/* Items */
-.state-dropdown .dropdown-item {
-  color: #333;
-  font-size: 15px;
-  padding: 8px 16px;
-  transition: background-color 0.15s ease;
-}
-
-.state-dropdown .dropdown-item:hover {
-  background-color: #e7f1ff;
-  color: #676779;
-  border-radius: 6px;
-}
-
-/* Style when toggle is active */
-.state-dropdown .dropdown-toggle:focus,
-.state-dropdown .dropdown-toggle:focus-visible,
-.state-dropdown .dropdown-toggle:active,
-.state-dropdown.show .dropdown-toggle,
-.state-dropdown.show .dropdown-toggle:active {
-  background-color: #676779 !important;
-  color: #fff !important;
-  border-color: #676779 !important;
-  box-shadow: none !important;
-}
-
 .content {
     display: flex;
     flex-direction: column;
@@ -88,6 +32,7 @@
 .info-card {
     display: flex;
     flex-direction: row;
+    gap: 12px;
 }
 
 .info-card h4 {
