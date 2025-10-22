@@ -1,8 +1,17 @@
-import React, { useState} from "react";
-import { FiHome, FiMapPin, FiSearch, FiUser, FiInfo, FiPhoneCall, FiLogOut } from "react-icons/fi";
-import "../dashboard.css"; // your styling (shared stylesheet in src/)
+import React, { useState, useEffect, useRef} from "react";
+import { FiHome, FiMapPin, FiSearch, FiUser, FiInfo, FiPhoneCall, FiLogOut, FiFilter, FiCalendar } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import "../dashboard.css";
+import Home from "./Home";
+import SearchCandidates from "./SearchCandidates";
+import ElectionInfo from "./ElectionInfo";
+import RegistrationInfo from "./RegistrationInfo";
+import AboutUs from "./AboutUs";
+import ContactUs from "./ContactUs";
+
 export const Dashboard = () => {
   const [active, setActive] = useState("home");
+  const navigate = useNavigate();
   return (
     <div className="dashboard">
       <aside className="sidebar">
@@ -19,7 +28,7 @@ export const Dashboard = () => {
 
         </nav>
         <div className="spacer"></div>
-        <button className="logout">
+        <button className="logout" onClick={() => navigate('/') }>
           <FiLogOut />
           <span>Log Out</span>
         </button>
@@ -39,58 +48,6 @@ export const Dashboard = () => {
     </div>
   );
 };
-
-function Home() {
-  return (
-    <div className="home-page">
-      <header className="topbar">
-        <h1>Welcome to CivicConnect!</h1>
-        <p>Your central hub for civic engagement and democratic participation</p>
-        <h2>Quick Actions</h2>
-      </header>
-    </div>
-  )
-}
-
-function SearchCandidates() {
-  return (
-    <div className="search-candidates">
-      <h2>Search Candidates</h2>
-    </div>
-  )
-}
-
-function ElectionInfo() {
-  return (
-    <div className="election-info">
-      <h2>Election Info</h2>
-    </div>
-  );
-}
-
-function RegistrationInfo() {
-  return (
-    <div className="registration-info">
-      <h2>Registration Info</h2>
-    </div>
-  );
-}
-
-function AboutUs() {
-  return (
-    <div className="about-us">
-      <h2>About Us</h2>
-    </div>
-  );
-}
-
-function ContactUs() {
-  return (
-    <div className="contact-us">
-      <h2>Contact Us</h2>
-    </div>
-  );
-}
 
 function NavItem({ icon, label, isActive, onClick }) {
   return (

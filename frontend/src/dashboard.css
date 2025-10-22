@@ -5,6 +5,12 @@
   background: #fff;
 }
 
+/* Icon styles */
+svg {
+  width: 28px;   /* icon width */
+  height: 28px;  /* icon height */
+}
+
 /* Sidebar (left) */
 .sidebar {
   display: flex;
@@ -84,40 +90,12 @@
 }
 /* Main (right) */
 .main {
-  position: flex;
   flex: 1; 
   display: flex;
   flex-direction: column;
   min-width: 0; 
+  padding: 40px
 }
-
-/* Topbar */
-.topbar {
-  background: #fff;
-  border-bottom: 2px solid #e5e7eb;
-}
-
-.topbar h1 {
-  margin: 0;
-  font-size: 25px;
-}
-
-.topbar h2 {
-  font-size: 22px;
-  margin: 10px 0;
-  text-align: center;
-}
-
-.topbar p {
-  margin: 4px 0 0;
-  font-size: 18px;
-  color: #676779;
-}
-/* Page content */
-.content {
-  padding: 20px;
-}
-
 
 /* Responsive: collapse sidebar on small screens */
 @media (max-width: 768px) {
