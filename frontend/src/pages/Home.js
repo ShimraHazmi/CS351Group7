@@ -7,8 +7,8 @@ function Home() {
         <h1>Welcome to CivicConnect!</h1>
         <p>Your central hub for civic engagement and democratic participation</p>
         <h2>Quick Actions</h2>
-        
       </header>
+      
       {/* Quick Actions */}
       <div className="quick-actions">
         <div className="candidate-search">
