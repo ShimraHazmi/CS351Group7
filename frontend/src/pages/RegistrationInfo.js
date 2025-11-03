@@ -1,5 +1,5 @@
 import "../css/registrationinfo.css";
-import React, { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { UsaStates } from 'usa-states';
 import { FiCheckCircle, FiInfo } from 'react-icons/fi';
