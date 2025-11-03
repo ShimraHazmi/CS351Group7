@@ -1,0 +1,55 @@
+/* the container of all tabs */
+.election-tabs .MuiTabs-flexContainer {
+    gap: 6px;
+    align-items: center; 
+    padding: 4px;
+    border-radius: 10px;
+    background: #d9d9d9;
+    width:fit-content;
+    margin-top: 20px;
+}
+
+/* each tab itself */
+.election-tabs .MuiTab-root {
+    text-transform: none;
+    min-height: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 15px;
+    padding: 0 10px;
+    border-radius: 10px;
+    transition: all 0.65s ease-in-out;
+}
+
+/* wrapper around label for perfect alignment */
+.election-tabs .MuiTab-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.election-tabs .Mui-selected {
+    background-color: #fff;
+    color: #000 !important;
+}
+
+.election-tabs .MuiTabs-indicator {
+    display: none;
+}
+
+.election-card {
+    border: 1px solid #000;
+    padding: 12px 12px;
+    border-radius: 8px;
+    box-shadow: none;
+    margin-top: 20px;
+}
+
+.election-title {
+    font-size: 20px;
+}
+
+.election-box {
+    border-radius: 8px;
+    border: 1px solid #000;
+}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef} from "react";
-import { FiHome, FiMapPin, FiSearch, FiUser, FiInfo, FiPhoneCall, FiLogOut, FiFilter, FiCalendar } from "react-icons/fi";
+import { useState} from "react";
+import { FiHome, FiMapPin, FiSearch, FiUser, FiInfo, FiPhoneCall, FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "../dashboard.css";
 import Home from "./Home";
