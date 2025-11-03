@@ -16,23 +16,26 @@ function AboutUs() {
         </div>
       </div>
 
-      <div className="mission-section">
-        <div className="section-header">
-          <div className="icon-box"><FiTarget /></div>
-          <h3>Our Mission</h3>
-        </div>
-        <p>To create a more informed and engaged citizenry by providing accessible tools and resources 
-          that connect people with their representatives, election information, and opportunities to participate in the democratic process.</p>
+      <div className="mission-vision">
+        <div className="mission-section">
+          <div className="section-header">
+            <div className="icon-box"><FiTarget /></div>
+            <h3>Our Mission</h3>
+          </div>
+          <p>To create a more informed and engaged citizenry by providing accessible tools and resources 
+            that connect people with their representatives, election information, and opportunities to participate in the democratic process.</p>
 
-      </div>
-
-      <div className="vision-section">
-        <div className="section-header">
-          <div className="icon-box"><FiTarget /></div>
-          <h3>Our Vision</h3>
         </div>
-        <p>A future where every citizen has the knowledge, tools, and confidence to actively participate in shaping their communities and government. </p>
+
+        <div className="vision-section">
+          <div className="section-header">
+            <div className="icon-box"><FiTarget /></div>
+            <h3>Our Vision</h3>
+          </div>
+          <p>A future where every citizen has the knowledge, tools, and confidence to actively participate in shaping their communities and government. </p>
+        </div>
       </div>
+      
 
       <div className="story-section">
         <h3>Our Story</h3>

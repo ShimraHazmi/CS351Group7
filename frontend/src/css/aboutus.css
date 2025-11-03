@@ -27,6 +27,16 @@
   margin-bottom: 8px;
 }
 
+.mission-vision {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.mission-vision > div {
+  flex: 1;
+  text-align:justify;
+}
 
 .mission-section {
   margin-top: 25px;
@@ -56,6 +66,7 @@
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
+  text-align: justify;
 }
 
 /* Header row with icon next to title */
