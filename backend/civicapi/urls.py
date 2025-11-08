@@ -8,4 +8,5 @@ urlpatterns = [
     path("search-races/", views.search_races),
     path("search-candidates/", views.search_candidates),
     path("autocomplete-candidates/", views.candidate_autocomplete),
+    path('login/', views.login, name='login')
 ]

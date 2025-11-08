@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
+from django.utils import timezone
 
 class Candidate(models.Model):
     # Basic candidate info
@@ -45,4 +47,22 @@ class Candidate(models.Model):
     
     def __str__(self):
         return f"{self.name} - {self.office} ({self.election_date or 'No date'})"
+
+class User(models.Model):
+    email = models.EmailField(unique=True, db_index=True)
+    password = models.CharField(max_length=128)
+    created_at = models.DateTimeField(default=timezone.now)
+
     
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+    
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+    
+    def __str__(self):
+        return self.email
+    
+    class Meta:
+        db_table = 'users'
+        ordering = ['-created_at']
