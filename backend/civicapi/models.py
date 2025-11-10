@@ -45,4 +45,3 @@ class Candidate(models.Model):
     
     def __str__(self):
         return f"{self.name} - {self.office} ({self.election_date or 'No date'})"
-    
