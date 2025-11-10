@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiUser, FiClipboard, FiPhoneCall, FiUsers } from "react-icons/fi";
-import "../login.css"; // your styling file
+import { authAPI } from "../api/auth";
+import "../login.css"; 
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    console.log("Attempting login with:", email);
+
+    try {
+      const result = await authAPI.login(email, password);
+      
+      if (result.success) {
+        console.log("Login successful!");
+        localStorage.setItem('user', JSON.stringify(result.user));
+        navigate("/dashboard");
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('Unable to connect to server. Make sure backend is running on port 8000.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="login-container">
@@ -18,27 +48,71 @@ const Login = () => {
             <span>Sign in to your account to continue engaging with your community</span>
           </div>
 
-          <form className="login-form">
+          <form className="login-form" onSubmit={handleSubmit}>
             <label>Email</label>
-            <input type="email" placeholder="name@example.com" />
+            <input 
+              type="email" 
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={loading}
+            />
 
             <div className="password-row">
               <label>Password</label>
-              <a href="#">Forgot password?</a>
+              <button type="button" onClick={() => console.log("Forgot password (not implemented)")}>
+                Forgot password?
+              </button>
             </div>
-            <input type="password" placeholder="Enter your password" />
+            <input 
+              type="password" 
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={loading}
+            />
 
-            <button type="button" className="signin-btn" onClick={() => navigate("/dashboard")}>
-              Sign in
+            {error && (
+              <div className="error-message" style={{
+                background: '#fee2e2',
+                border: '1px solid #ef4444',
+                color: '#991b1b',
+                padding: '12px',
+                borderRadius: '6px',
+                marginBottom: '16px',
+                fontSize: '14px'
+              }}>
+                {error}
+              </div>
+            )}
+
+            <button type="submit" className="signin-btn" disabled={loading}>
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
 
             <div className="signup-row">
               <p>Don't have an account?</p>
             </div>
 
-            <button type="button" className="create-btn">
+            <button type="button" className="create-btn" onClick={() => console.log("Create account (not implemented)")}>
               Create an account
             </button>
+
+            {/* TESTING FIX ME*/}
+            <div style={{
+              marginTop: '20px',
+              padding: '12px',
+              background: '#f0f9ff',
+              border: '1px solid #bae6fd',
+              borderRadius: '6px',
+              textAlign: 'center'
+            }}>
+              <small style={{color: '#0369a1', fontSize: '12px'}}>
+                Test: testing@gmail.com / testing123
+              </small>
+            </div>
           </form>
         </div>
       </div>
