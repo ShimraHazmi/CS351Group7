@@ -16,8 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+import auth
+from civicapi import views as civic_views
 
 urlpatterns = [
+    path("auth/login", auth.login),
+    path("auth/callback", auth.callback),
+    path("auth/logout", auth.logout),
+    path("api/me", civic_views.me, name="me"),
     path('admin/', admin.site.urls),
     path("api/", include("civicapi.urls")),
 ]

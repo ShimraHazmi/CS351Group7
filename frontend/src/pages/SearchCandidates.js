@@ -84,7 +84,6 @@ function SearchCandidates() {
       <div className="candidate-search" style={{ position: 'relative' }}>
         <FiSearch />
         <input 
-          icon 
           type="text" 
           placeholder="Search candidates by name or office" 
           value={candidateQuery}

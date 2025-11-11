@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Candidate(models.Model):
     # Basic candidate info
@@ -45,3 +46,18 @@ class Candidate(models.Model):
     
     def __str__(self):
         return f"{self.name} - {self.office} ({self.election_date or 'No date'})"
+
+class User(models.Model):
+    email = models.EmailField(unique=True, db_index=True)
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
+    picture = models.URLField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        name = f"{(self.first_name or '').strip()} {(self.last_name or '').strip()}".strip()
+        return name or self.email
+    
+    class Meta:
+        db_table = 'users'
+        ordering = ['-created_at']

@@ -86,10 +86,10 @@ function ContactUs() {
         </div>
       </div>
 
-      <div class="section-2">
-        <div class="header">
+      <div className="section-2">
+        <div className="header">
           <h3>Frequently Asked Questions</h3>
-          <p class="description">Quick answers to common questions</p>
+          <p className="description">Quick answers to common questions</p>
         </div>
       </div>
     </div>
