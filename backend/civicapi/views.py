@@ -8,9 +8,6 @@ from .utils import log_query
 from utils.bloom_filter import BloomFilter
 from .models import Candidate
 from datetime import datetime
-from django.views.decorators.http import require_http_methods
-from .models import User
-import json
 
 # Create your views here.
 
