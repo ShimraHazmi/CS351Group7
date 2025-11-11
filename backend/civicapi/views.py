@@ -6,7 +6,7 @@ from .trie import Trie
 from django.views.decorators.csrf import csrf_exempt
 from .utils import log_query
 from utils.bloom_filter import BloomFilter
-from .models import Candidate
+from .models import Candidate, User
 from datetime import datetime
 
 # Create your views here.
