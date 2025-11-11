@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
 
 class Candidate(models.Model):
@@ -50,18 +49,14 @@ class Candidate(models.Model):
 
 class User(models.Model):
     email = models.EmailField(unique=True, db_index=True)
-    password = models.CharField(max_length=128)
+    provider = models.CharField(max_length=50, default='google')
+    provider_sub = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=100, blank=True)
+    picture = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
 
-    
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
-    
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
-    
     def __str__(self):
-        return self.email
+        return f"{self.name} or self.email"
     
     class Meta:
         db_table = 'users'

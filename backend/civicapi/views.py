@@ -356,64 +356,13 @@ def candidate_autocomplete(request):
         "count": len(display_suggestions)
     })
 
-@csrf_exempt
-@require_http_methods(["POST"])
-def login(request):
-    try:
-        data = json.loads(request.body)
-        email = data.get('email', '').strip().lower()
-        password = data.get('password', '')
-        
-        print("\n" + "="*60)
-        print("LOGIN ATTEMPT")
-        print("="*60)
-        print(f"Email: {email}")
-        
-        if not email or not password:
-            print("ERROR: Missing credentials")
-            print("="*60 + "\n")
-            return JsonResponse({
-                'success': False,
-                'error': 'Email and password are required'
-            }, status=400)
-        
-        try:
-            user = User.objects.get(email=email)
-            print(f"User found (ID: {user.id})")
-            
-            if user.check_password(password):
-                print("Password correct - LOGIN SUCCESSFUL")
-                print("="*60 + "\n")
-                
-                return JsonResponse({
-                    'success': True,
-                    'message': 'Login successful',
-                    'user': {
-                        'id': user.id,
-                        'email': user.email
-                    }
-                })
-            else:
-                print("ERROR: Wrong password")
-                print("="*60 + "\n")
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Invalid email or password'
-                }, status=401)
-                
-        except User.DoesNotExist:
-            print("ERROR: User not found")
-            print("="*60 + "\n")
-            return JsonResponse({
-                'success': False,
-                'error': 'Invalid email or password'
-            }, status=401)
-            
-    except Exception as e:
-        print(f"ERROR: {str(e)}")
-        print("="*60 + "\n")
+def me(request):
+    if request.session.get("session_active"):
         return JsonResponse({
-            'success': False,
-            'error': 'Server error'
-        }, status=500)
-
+            "ok": True,
+            "user": {
+                "email": request.session.get("user_email"),
+                "name": request.session.get("user_name"),
+            },
+        })
+    return JsonResponse({"ok": False}, status=401)

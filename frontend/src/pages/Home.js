@@ -137,7 +137,6 @@ function Home() {
         <div className="candidate-search">
           <FiCalendar />
           <input 
-            icon 
             type="text" 
             placeholder="Search by election type (e.g., president, mayor, senate)" 
             value={electionTypeQuery}
@@ -151,7 +150,6 @@ function Home() {
         <div className="election-info-search">
           <FiMapPin />
           <input 
-            icon 
             type="text" 
             placeholder="Enter your address" 
             value={address}
@@ -164,7 +162,7 @@ function Home() {
         </div>
         <div className="registration-info-search">
           <FiUser />
-          <input icon type="text" placeholder="Search User" />
+          <input type="text" placeholder="Search User" />
         </div>
       </div>
 

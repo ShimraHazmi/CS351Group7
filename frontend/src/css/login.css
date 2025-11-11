@@ -59,20 +59,6 @@
   margin-top: 0rem;
 }
 
-.password-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  /* margin-top: 1rem; */
-}
-
-.password-row a {
-  font-size: 0.85rem;
-  color: #333;
-  text-decoration: none;
-}
-
 .signin-btn {
   width: 100%;
   background: #0b0b23;
@@ -84,19 +70,23 @@
   cursor: pointer;
 }
 
-.signup-row {
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 1rem;
-  color: #777;
+.error-message {
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 14px;
 }
 
-.create-btn {
-  background: white;
-  border: 1px solid #ccc;
-  padding: 0.7rem;
+.googleoauth {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
   border-radius: 6px;
-  cursor: pointer;
+  text-align: center;
 }
 
 /* Right side - Image + Overlay */
