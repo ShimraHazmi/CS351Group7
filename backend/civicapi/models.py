@@ -49,14 +49,14 @@ class Candidate(models.Model):
 
 class User(models.Model):
     email = models.EmailField(unique=True, db_index=True)
-    provider = models.CharField(max_length=50, default='google')
-    provider_sub = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=100, blank=True)
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
     picture = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.name} or self.email"
+        name = f"{(self.first_name or '').strip()} {(self.last_name or '').strip()}".strip()
+        return name or self.email
     
     class Meta:
         db_table = 'users'

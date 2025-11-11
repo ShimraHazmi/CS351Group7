@@ -356,13 +356,26 @@ def candidate_autocomplete(request):
         "count": len(display_suggestions)
     })
 
+# API to fetch the current user (session-based)
 def me(request):
-    if request.session.get("session_active"):
-        return JsonResponse({
-            "ok": True,
-            "user": {
-                "email": request.session.get("user_email"),
-                "name": request.session.get("user_name"),
-            },
-        })
-    return JsonResponse({"ok": False}, status=401)
+    uid = request.session.get("user_id")
+    if not request.session.get("session_active") or not uid:
+        return JsonResponse({"ok": False}, status=401)
+
+    try:
+        u = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        # Session says logged in but user row is gone → clear and report not logged in
+        request.session.flush()
+        return JsonResponse({"ok": False}, status=401)
+
+    return JsonResponse({
+        "ok": True,
+        "user": {
+            "email": u.email,
+             "first_name": u.first_name,
+            "last_name": u.last_name,
+            "picture": u.picture,
+        },
+    })
+    
