@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRecentActivity } from '../context/RecentActivityContext';
 import { FiSearch, FiFilter } from "react-icons/fi";
 import "../css/searchcandidates.css";
 
@@ -11,6 +12,7 @@ function SearchCandidates() {
   // Autocomplete state
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const { addActivity } = useRecentActivity();
 
   const handleSearchCandidates = async () => {
     if (!candidateQuery.trim()) {
@@ -33,6 +35,21 @@ function SearchCandidates() {
       const data = await response.json();
       console.log("Candidate search response:", data);
       setCandidateResults(data);
+      // only record activity when there are results
+      try {
+        const count = data.count || (data.candidates && data.candidates.length) || 0;
+        if (count > 0) {
+          addActivity({
+            type: 'search',
+            action: 'search_candidates',
+            label: candidateQuery.trim(),
+            description: `Searched candidates "${candidateQuery.trim()}" — found ${count} candidate${count!==1? 's':''}${data.totalRaces? ` across ${data.totalRaces} race${data.totalRaces!==1? 's':''}`: ''}`,
+            meta: { count, totalRaces: data.totalRaces }
+          });
+        }
+      } catch (e) {
+        // ignore context errors
+      }
     } catch (err) {
       setError(err.message);
     } finally {

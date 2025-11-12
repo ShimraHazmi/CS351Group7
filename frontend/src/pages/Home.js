@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiMapPin, FiSearch, FiUser, FiCalendar } from "react-icons/fi";
+import { useRecentActivity } from '../context/RecentActivityContext';
+import RecentActivity from '../components/RecentActivity';
 import "../css/home.css";
 
 function Home() {
@@ -14,6 +16,7 @@ function Home() {
   const [electionTypeResults, setElectionTypeResults] = useState(null);
   const [electionTypeLoading, setElectionTypeLoading] = useState(false);
   const [electionTypeError, setElectionTypeError] = useState(null);
+  const { addActivity } = useRecentActivity();
 
   // Fetch the default election ID when component mounts
   useEffect(() => {
@@ -70,6 +73,21 @@ function Home() {
       const data = await response.json();
       console.log("Voter info response:", data); // Debug: see what we're getting
       setVoterInfo(data);
+      // record recent activity only when there are results
+      try {
+        const contestsCount = data.contests ? data.contests.length : 0;
+        const pollingCount = data.pollingLocations ? data.pollingLocations.length : 0;
+        const resultCount = contestsCount + pollingCount;
+        if (resultCount > 0) {
+          addActivity({
+            type: 'search',
+            action: 'search_address',
+            label: address.trim(),
+            description: `Searched address "${address.trim()}" — found ${contestsCount} contest${contestsCount!==1? 's':''}${pollingCount? ` and ${pollingCount} polling location${pollingCount!==1? 's':''}`: ''}`,
+            meta: { electionId: electionId || null, contests: contestsCount, pollingLocations: pollingCount }
+          });
+        }
+      } catch (e) { /* ignore */ }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -111,6 +129,19 @@ function Home() {
         count: data.count || 0,
         races: data.races || [],
       });
+      // record recent activity only if results were found
+      try {
+        const c = data.count || 0;
+        if (c > 0) {
+          addActivity({
+            type: 'search',
+            action: 'search_election_type',
+            label: electionTypeQuery.trim(),
+            description: `Searched election type "${electionTypeQuery.trim()}" — found ${c} race${c!==1? 's':''}`,
+            meta: { resultCount: c }
+          });
+        }
+      } catch (e) {}
     } catch (err) {
       setElectionTypeError(err.message);
     } finally {
@@ -355,6 +386,7 @@ function Home() {
           <h3>Recent Activity</h3>
           <p className="description">Your latest civic engagement actions</p>
         </div>
+        <RecentActivity limit={8} />
       </div>
      
     </div>
