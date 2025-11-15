@@ -65,7 +65,6 @@ def get_voter_info(request):
         "address": address,
     }
     
-    # ElectionId - if provided by frontend, use it; otherwise Google uses default
     if "electionId" in request.GET:
         params["electionId"] = request.GET["electionId"]
     
@@ -353,7 +352,7 @@ def candidate_autocomplete(request):
         "count": len(display_suggestions)
     })
 
-# API to fetch the current user (session-based)
+# API to fetch the current user 
 def me(request):
     uid = request.session.get("user_id")
     if not request.session.get("session_active") or not uid:
@@ -376,3 +375,53 @@ def me(request):
         },
     })
     
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
+import json
+from .models import ContactMessage  # Adjust import as needed
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def submit_contact_form(request):
+    try:
+        data = json.loads(request.body)
+
+        first_name = data.get('first_name', '').strip()
+        last_name = data.get('last_name', '').strip()
+        email = data.get('email', '').strip()
+        subject = data.get('subject', '').strip()
+        message = data.get('message', '').strip()
+
+        if not all([first_name, last_name, email, subject, message]):
+            return JsonResponse({
+                'success': False,
+                'error': 'All fields are required'
+            }, status=400)
+
+        contact = ContactMessage.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Your message has been sent successfully!',
+            'submission_id': contact.id
+        })
+
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'error': 'Invalid JSON'
+        }, status=400)
+
+    except Exception:
+        return JsonResponse({
+            'success': False,
+            'error': 'Server error'
+        }, status=500)
+
