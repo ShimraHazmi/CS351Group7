@@ -61,3 +61,21 @@ class User(models.Model):
     class Meta:
         db_table = 'users'
         ordering = ['-created_at']
+
+class ContactMessage(models.Model):
+    """Store contact form submissions"""
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=255)
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    
+    created_at = models.DateTimeField(default=timezone.now)
+    is_read = models.BooleanField(default=False)
+    
+    class Meta:
+        db_table = 'contact_messages'
+        ordering = ['-created_at']  
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.subject}"
