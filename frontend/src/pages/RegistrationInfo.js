@@ -22,14 +22,14 @@ function RegistrationInfo() {
       {/* Registration Information */}
       <div className="regis-info">
         {/* State Information */}
-        <div className="state-card">
+        {/* <div className="state-card">
           <div className="header">
             <h3>Select Your State</h3>
             <p className="description">Choose your state to view election information specific to your location</p>
-          </div>
+          </div> */}
 
           {/* Dropdown for State Selection */}
-          <Dropdown className="state-dropdown">
+          {/* <Dropdown className="state-dropdown">
             <Dropdown.Toggle variant="success" id="dropdown-basic">
               {selectedState ? selectedState.name : "Select State"}
             </Dropdown.Toggle>
@@ -42,7 +42,7 @@ function RegistrationInfo() {
               ))}
             </Dropdown.Menu>
           </Dropdown>
-        </div>
+        </div> */}
 
         {/* Registration Requirements */}
         <div className="requirements-card">
