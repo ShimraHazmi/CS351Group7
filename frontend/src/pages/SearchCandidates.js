@@ -118,9 +118,9 @@ function SearchCandidates() {
         >
           {loading ? "Searching..." : <FiSearch />}
         </button>
-        <button type="button" className="filter-button">
+        {/* <button type="button" className="filter-button">
           <FiFilter className="filter-icon" />
-        </button>
+        </button> */}
         
         {/* Autocomplete Dropdown */}
         {showAutocomplete && autocompleteSuggestions.length > 0 && (

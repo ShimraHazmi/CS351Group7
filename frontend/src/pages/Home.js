@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FiMapPin, FiSearch, FiUser, FiCalendar } from "react-icons/fi";
 import { useRecentActivity } from '../context/RecentActivityContext';
 import RecentActivity from '../components/RecentActivity';
+import StatsChart from '../components/StatsChart';
 import "../css/home.css";
 
 function Home() {
@@ -178,7 +179,7 @@ function Home() {
             {electionTypeLoading ? "Searching..." : "Search"}
           </button>
         </div>
-        <div className="election-info-search">
+        {/* <div className="election-info-search">
           <FiMapPin />
           <input 
             type="text" 
@@ -190,11 +191,11 @@ function Home() {
           <button onClick={handleSearchElections} disabled={loading}>
             {loading ? "Searching..." : "Search"}
           </button>
-        </div>
-        <div className="registration-info-search">
+        </div> */}
+        {/* <div className="registration-info-search">
           <FiUser />
           <input type="text" placeholder="Search User" />
-        </div>
+        </div> */}
       </div>
 
       {/* Display election type search errors */}
@@ -363,6 +364,10 @@ function Home() {
               <FiCalendar />
               <h4>School Board Election</h4>
             </div>
+            <div className="election-card">
+              <FiCalendar />
+              <h4>Presidential Election</h4>
+            </div>
           </div>
         </div>
 
@@ -374,9 +379,7 @@ function Home() {
           </div>
 
           <div className="content">
-            <h4>Polls Participated</h4>
-            <h4>Issues Voted On</h4>
-            <h4>Representatives Contacted</h4>
+            <StatsChart days={14} />
           </div>
         </div>
       </div>
