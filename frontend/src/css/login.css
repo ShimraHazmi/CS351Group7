@@ -89,6 +89,12 @@
   text-align: center;
 }
 
+.googleoauth small {
+  color: #0369a1;
+  font-size: 12px;
+  text-align: center;
+}
+
 /* Right side - Image + Overlay */
 .login-right {
   flex: 0.8;

@@ -80,8 +80,8 @@ const Login = () => {
             </button>
 
             {/* GoogleOAuth */}
-            <div className="googleauth">
-              <small style={{ color: "#0369a1", fontSize: 12 }}>
+            <div className="googleoauth">
+              <small>
                 We use Google to securely sign you in. No passwords stored here.
               </small>
             </div>
