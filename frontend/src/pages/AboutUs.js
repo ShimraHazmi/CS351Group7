@@ -41,7 +41,7 @@ function AboutUs() {
         <h3>Our Story</h3>
         <p>CivicConnect was founded in 2025 by a group of civic-minded technologists who recognized a critical gap in how citizens engage with their government.</p>
         <p>We saw that while information about elections, representatives, and civic participation existed, it was often scattered, difficult to navigate, and not accessible to everyone. We set out to change that.</p>
-        <p>Today, CivicConnect serves millions of users across the country, providing them with the tools and information they need to be informed, engaged citizens. We've helped countless people register to vote, connect with their representatives, and participate in their communities.
+        <p>Today, CivicConnect provides users with the tools and information they need to be informed, engaged citizens. We've helped countless people register to vote, connect with their representatives, and participate in their communities.
         Our work is guided by the belief that democracy works best when everyone participates. We're committed to breaking down barriers to civic engagement and ensuring that every citizen has the opportunity to make their voice heard.</p>
       </div>
     </div>

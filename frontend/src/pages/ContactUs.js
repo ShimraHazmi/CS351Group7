@@ -190,8 +190,22 @@ function ContactUs() {
           <h3>Frequently Asked Questions</h3>
           <p className="description">Quick answers to common questions</p>
         </div>
+        <div className = "FAQ-list">
+          <div className="faq-item">
+            <h5>How do I search for my representatives?</h5>
+            <p>Enter your address or a candidate name in the search box on the Home or Search page, then press Enter or click Search. Results show contests, candidates, and contact info.</p>
+          </div>
+          <div className="faq-item">
+            <h5>Why can't I find a candidate or race?</h5>
+            <p>Some races may not be in the dataset yet (local or small elections). Try a broader query (city/state) or check back later — we refresh the data periodically.</p>
+          </div>
+          <div className="faq-item">
+            <h5>Where do you get your data?</h5>
+            <p>We use public election and civic data sources (e.g., government APIs). For specific sources and update schedules, reach out to us here!</p>
+          </div>
       </div>
     </div>
+  </div>
   );
 }
 export default ContactUs;

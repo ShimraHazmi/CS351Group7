@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiMapPin, FiSearch, FiUser, FiCalendar } from "react-icons/fi";
 import { useRecentActivity } from '../context/RecentActivityContext';
 import RecentActivity from '../components/RecentActivity';
@@ -18,6 +18,9 @@ function Home() {
   const [electionTypeLoading, setElectionTypeLoading] = useState(false);
   const [electionTypeError, setElectionTypeError] = useState(null);
   const { addActivity } = useRecentActivity();
+  const electionTypeInputRef = useRef(null);
+  const addressInputRef = useRef(null);
+  const [hasSearchedHome, setHasSearchedHome] = useState(false);
 
   // Fetch the default election ID when component mounts
   useEffect(() => {
@@ -93,6 +96,7 @@ function Home() {
       setError(err.message);
     } finally {
       setLoading(false);
+      setHasSearchedHome(true);
     }
   };
 
@@ -147,6 +151,7 @@ function Home() {
       setElectionTypeError(err.message);
     } finally {
       setElectionTypeLoading(false);
+      setHasSearchedHome(true);
     }
   };
 
@@ -154,6 +159,23 @@ function Home() {
     if (e.key === "Enter") {
       handleSearchElectionType();
     }
+  };
+
+  const handleBackToSearch = () => {
+    // Clear both search inputs and results
+    setElectionTypeQuery("");
+    setElectionTypeResults(null);
+    setElectionTypeError(null);
+    setElectionTypeLoading(false);
+
+    setAddress("");
+    setVoterInfo(null);
+    setError(null);
+    setLoading(false);
+
+    // hide any UI autocompletes etc (if added later)
+    if (electionTypeInputRef.current) electionTypeInputRef.current.focus();
+    else if (addressInputRef.current) addressInputRef.current.focus();
   };
 
   return (
@@ -173,11 +195,15 @@ function Home() {
             placeholder="Search by election type (e.g., president, mayor, senate)" 
             value={electionTypeQuery}
             onChange={(e) => setElectionTypeQuery(e.target.value)}
+            ref={electionTypeInputRef}
             onKeyPress={handleElectionTypeKeyPress}
           />
           <button onClick={handleSearchElectionType} disabled={electionTypeLoading}>
             {electionTypeLoading ? "Searching..." : "Search"}
           </button>
+            {hasSearchedHome && (
+              <button type="button" className="back-button inline" onClick={handleBackToSearch}>← Back</button>
+            )}
         </div>
         {/* <div className="election-info-search">
           <FiMapPin />
@@ -207,7 +233,7 @@ function Home() {
 
       {/* Display election type search results */}
       {electionTypeResults && (
-        <div className="election-type-results" style={{ padding: '20px', margin: '20px 0', border: '1px solid #ccc', borderRadius: '5px' }}>
+        <div className="election-type-results search-results-panel" style={{ padding: '20px', margin: '20px 0' }}>
           <h3>Election Races for "{electionTypeQuery}"</h3>
           {electionTypeResults.count > 0 && (
             <p style={{ color: '#666', marginBottom: '15px' }}>
@@ -282,7 +308,7 @@ function Home() {
 
       {/* Display voter info results */}
       {voterInfo && (
-        <div className="voter-info-results" style={{ padding: '20px', margin: '20px 0', border: '1px solid #ccc' }}>
+        <div className="voter-info-results search-results-panel" style={{ padding: '20px', margin: '20px 0' }}>
           <h3>Voter Information</h3>
           
           {/* Show raw data for debugging if nothing else shows */}
@@ -346,6 +372,8 @@ function Home() {
           )}
         </div>
       )}
+
+      {/* Back button is inline in the search bar and shown only after a search */}
 
       <div className="home-section-1">
         {/* Upcoming Elections */}
