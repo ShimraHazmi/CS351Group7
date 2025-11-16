@@ -6,7 +6,7 @@ from .trie import Trie
 from django.views.decorators.csrf import csrf_exempt
 from .utils import log_query
 from utils.bloom_filter import BloomFilter
-from .models import Candidate, User
+from .models import Candidate, User, ElectionRace
 from datetime import datetime
 
 # Create your views here.
@@ -15,6 +15,86 @@ bloom = BloomFilter(items_count=100000, fp_prob=0.01)
 
 # Global Trie for candidate name autocomplete
 candidate_trie = Trie()
+
+
+def _parse_iso_date(date_str):
+    if not date_str:
+        return None
+    try:
+        return datetime.fromisoformat(date_str.replace('Z', '+00:00')).date()
+    except ValueError:
+        try:
+            return datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return None
+
+
+def _get_or_cache_races(country, province, election_date_str):
+    date_obj = _parse_iso_date(election_date_str)
+    if not date_obj:
+        return []
+
+    country = (country or "US").upper()
+    normalized_province = (province or "").upper()
+
+    filters = {
+        "country": country,
+        "election_date": date_obj,
+    }
+    if normalized_province:
+        filters["province"] = normalized_province
+
+    cached_qs = ElectionRace.objects.filter(**filters)
+
+    if cached_qs.exists():
+        return [race.to_dict() for race in cached_qs]
+
+    race_params = {
+        "startDate": date_obj.isoformat(),
+        "endDate": date_obj.isoformat(),
+        "country": country,
+        "limit": 100,
+    }
+    if normalized_province:
+        race_params["province"] = normalized_province
+
+    try:
+        response = requests.get(
+            "https://civicapi.org/api/v2/race/search",
+            params=race_params,
+            timeout=10,
+        )
+        response.raise_for_status()
+        races = response.json().get("races", [])
+    except requests.RequestException:
+        races = []
+
+    results = []
+    for race_data in races:
+        race_id = race_data.get("id")
+        if race_id is None:
+            continue
+        election_date = _parse_iso_date(race_data.get("election_date")) or date_obj
+        normalized_prov = (race_data.get("province") or normalized_province or "").upper()
+        district = race_data.get("district") or ""
+
+        obj, _ = ElectionRace.objects.update_or_create(
+            race_id=race_id,
+            defaults={
+                "name": race_data.get("election_name") or race_data.get("name") or "Unknown Race",
+                "race_type": race_data.get("type") or "",
+                "election_type": race_data.get("election_type") or "",
+                "election_date": election_date,
+                "country": country,
+                "province": normalized_prov,
+                "district": district,
+                "candidates": race_data.get("candidates") or [],
+                "raw_data": race_data,
+            },
+        )
+        results.append(obj.to_dict())
+
+    return results
 
 def has_voter_info(election_id, address):
     key = f"{election_id}:{address.strip().lower()}"
@@ -233,6 +313,79 @@ def fetch_and_save_candidates(query, request):
         })
 
 
+def get_election_dates(request):
+    """Fetch election dates and augment each with race details for that date."""
+    params = {}
+
+    year = request.GET.get("year")
+    country = request.GET.get("country")
+    province = request.GET.get("province")
+
+    if year:
+        params["year"] = year
+    if country:
+        params["country"] = country
+    if province:
+        params["province"] = province
+
+    if "year" not in params:
+        params["year"] = str(datetime.utcnow().year)
+    if "country" not in params:
+        params["country"] = "US"
+
+    params["country"] = (params["country"] or "US").upper()
+    if province:
+        province = province.upper()
+        params["province"] = province
+
+    try:
+        response = requests.get(
+            "https://civicapi.org/api/v2/getElectionDates",
+            params=params,
+            timeout=10,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        months = data.get("months", []) or []
+        if months:
+            unique_dates = []
+            seen_dates = set()
+            for month in months:
+                for date_entry in month.get("dates", []) or []:
+                    election_date = date_entry.get("date")
+                    if election_date and election_date not in seen_dates:
+                        seen_dates.add(election_date)
+                        unique_dates.append(election_date)
+
+            race_details_cache = {}
+            for election_date in unique_dates:
+                race_details_cache[election_date] = _get_or_cache_races(
+                    params["country"],
+                    province,
+                    election_date,
+                )
+
+            for month in months:
+                for date_entry in month.get("dates", []) or []:
+                    election_date = date_entry.get("date")
+                    if election_date:
+                        date_entry["raceDetails"] = race_details_cache.get(election_date, [])
+
+        return JsonResponse(data)
+
+    except requests.RequestException as exc:
+        return JsonResponse(
+            {"error": f"Failed to fetch election dates: {exc}"},
+            status=502,
+        )
+    except ValueError:
+        return JsonResponse(
+            {"error": "Invalid response from civicAPI"},
+            status=502,
+        )
+
+
 def search_races(request):
     """Search civicAPI for election races by type or keyword."""
     query = request.GET.get("query", "").strip()
@@ -410,7 +563,7 @@ def submit_contact_form(request):
         return JsonResponse({
             'success': True,
             'message': 'Your message has been sent successfully!',
-            'submission_id': contact.id
+            'submission_id': contact.pk
         })
 
     except json.JSONDecodeError:

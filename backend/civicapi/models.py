@@ -47,6 +47,42 @@ class Candidate(models.Model):
     def __str__(self):
         return f"{self.name} - {self.office} ({self.election_date or 'No date'})"
 
+
+class ElectionRace(models.Model):
+    race_id = models.IntegerField(unique=True)
+    name = models.CharField(max_length=255)
+    race_type = models.CharField(max_length=100, blank=True)
+    election_type = models.CharField(max_length=100, blank=True)
+    election_date = models.DateField()
+    country = models.CharField(max_length=3, default="US")
+    province = models.CharField(max_length=5, blank=True)
+    district = models.CharField(max_length=255, blank=True)
+    candidates = models.JSONField(default=list, blank=True)
+    raw_data = models.JSONField(default=dict, blank=True)
+    cached_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["election_date", "country", "province"]),
+            models.Index(fields=["country", "province"]),
+        ]
+        ordering = ["-election_date", "name"]
+
+    def to_dict(self):
+        return {
+            "id": self.race_id,
+            "name": self.name,
+            "type": self.race_type,
+            "electionType": self.election_type,
+            "province": self.province or None,
+            "district": self.district or None,
+            "electionDate": self.election_date.isoformat() if self.election_date else None,
+            "candidates": self.candidates or [],
+        }
+
+    def __str__(self):
+        return f"{self.name} ({self.election_date})"
+
 class User(models.Model):
     email = models.EmailField(unique=True, db_index=True)
     first_name = models.CharField(max_length=100, blank=True, null=True)
