@@ -5,12 +5,14 @@ import '../css/contactus.css';
 
 function ContactUs() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const [submitStatus, setSubmitStatus] = useState(null); // null, 'success', or 'error'
+  const [submitStatus, setSubmitStatus] = useState(null); // null, 'success', 'error', or 'cooldown'
+  const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     setSubmitStatus(null);
+    setErrorMessage('');
 
     try {
       console.log('Submitting form data:', data);
@@ -30,12 +32,33 @@ function ContactUs() {
         })
       });
       
+      const result = await response.json();
+      
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || 'Failed to send message');
+        // Handle different error statuses
+        if (response.status === 429) {
+          // Cooldown active
+          setSubmitStatus('cooldown');
+          setErrorMessage(result.error || 'Please wait before submitting again');
+        } else if (response.status === 400) {
+          // Validation error
+          setSubmitStatus('error');
+          setErrorMessage(result.error || 'Please fill out all required fields');
+        } else {
+          // Other errors
+          setSubmitStatus('error');
+          setErrorMessage(result.error || 'Failed to send message. Please try again.');
+        }
+        
+        // Auto-hide error messages after 8 seconds
+        setTimeout(() => {
+          setSubmitStatus(null);
+          setErrorMessage('');
+        }, 8000);
+        
+        return;
       }
       
-      const result = await response.json();
       console.log('Message sent successfully:', result);
       
       // Clear the form
@@ -44,7 +67,6 @@ function ContactUs() {
       // Show success message
       setSubmitStatus('success');
       
-    
       setTimeout(() => {
         setSubmitStatus(null);
       }, 5000);
@@ -52,11 +74,13 @@ function ContactUs() {
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');
+      setErrorMessage('Network error.');
       
-    
+
       setTimeout(() => {
         setSubmitStatus(null);
-      }, 5000);
+        setErrorMessage('');
+      }, 8000);
     } finally {
       setIsSubmitting(false);
     }
@@ -95,6 +119,23 @@ function ContactUs() {
             </div>
           )}
 
+          {submitStatus === 'cooldown' && (
+            <div style={{
+              backgroundColor: '#fff3cd',
+              color: '#856404',
+              padding: '12px 20px',
+              borderRadius: '5px',
+              marginBottom: '20px',
+              border: '1px solid #ffeaa7',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <span style={{ fontSize: '20px' }}>⏱</span>
+              <span><strong>Please wait!</strong> {errorMessage}</span>
+            </div>
+          )}
+
           {/* Error Message */}
           {submitStatus === 'error' && (
             <div style={{
@@ -109,7 +150,7 @@ function ContactUs() {
               gap: '10px'
             }}>
               <span style={{ fontSize: '20px' }}>✗</span>
-              <span><strong>Error!</strong> Something went wrong. Please try again later.</span>
+              <span><strong>Error!</strong> {errorMessage || 'Something went wrong. Please try again later.'}</span>
             </div>
           )}
 
@@ -117,32 +158,53 @@ function ContactUs() {
           <div className="name">
             <div className="first-name">
               <label htmlFor="first-name">First Name</label>
-              <input id="first-name" {...register("first-name", { required: true })} />
-              {errors["first-name"] && <span>This field is required</span>}
+              <input 
+                id="first-name" 
+                {...register("first-name", { required: true })} 
+                disabled={isSubmitting}
+              />
+              {errors["first-name"] && <span className="error-text">This field is required</span>}
             </div>
             <div className="last-name">
               <label htmlFor="last-name">Last Name</label>
-              <input id="last-name" {...register("last-name", { required: true })} />
-              {errors["last-name"] && <span>This field is required</span>}
+              <input 
+                id="last-name" 
+                {...register("last-name", { required: true })} 
+                disabled={isSubmitting}
+              />
+              {errors["last-name"] && <span className="error-text">This field is required</span>}
             </div>
           </div>
 
           <div>
             <label htmlFor="email">Email</label>
-            <input id="email" type="email" {...register("email", { required: true })} />
-            {errors.email && <span>This field is required</span>}
+            <input 
+              id="email" 
+              type="email" 
+              {...register("email", { required: true })} 
+              disabled={isSubmitting}
+            />
+            {errors.email && <span className="error-text">This field is required</span>}
           </div>
 
           <div>
             <label htmlFor="subject">Subject</label>
-            <input id="subject" {...register("subject", { required: true })} />
-            {errors.subject && <span>This field is required</span>}
+            <input 
+              id="subject" 
+              {...register("subject", { required: true })} 
+              disabled={isSubmitting}
+            />
+            {errors.subject && <span className="error-text">This field is required</span>}
           </div>
 
           <div>
             <label htmlFor="message">Message</label>
-            <textarea id="message" {...register("message", { required: true })}></textarea>
-            {errors.message && <span>This field is required</span>}
+            <textarea 
+              id="message" 
+              {...register("message", { required: true })}
+              disabled={isSubmitting}
+            ></textarea>
+            {errors.message && <span className="error-text">This field is required</span>}
           </div>
           
           <button 
@@ -208,4 +270,5 @@ function ContactUs() {
   </div>
   );
 }
+
 export default ContactUs;

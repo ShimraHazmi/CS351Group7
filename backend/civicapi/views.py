@@ -8,10 +8,18 @@ from .utils import log_query
 from utils.bloom_filter import BloomFilter
 from .models import Candidate, User, ElectionRace
 from datetime import datetime
+import hashlib
+import json
+from django.views.decorators.http import require_http_methods
+from .models import ContactMessage
 
 # Create your views here.
 
 bloom = BloomFilter(items_count=100000, fp_prob=0.01)
+
+# Bloom filter for contact form cooldown
+contact_cooldown_filter = BloomFilter(items_count=10000, fp_prob=0.01)
+COOLDOWN_MINUTES = 15  # Adjust as needed
 
 # Global Trie for candidate name autocomplete
 candidate_trie = Trie()
@@ -104,6 +112,19 @@ def add_voter_info(election_id, address):
     key = f"{election_id}:{address.strip().lower()}"
     bloom.add(key)
 
+def get_submission_key(email: str) -> str:
+    """
+    Create a unique key for tracking contact form submissions.
+    Uses email + time window for cooldown tracking.
+    """
+    now = datetime.now()
+    window = now.replace(minute=(now.minute // COOLDOWN_MINUTES) * COOLDOWN_MINUTES, 
+                         second=0, microsecond=0)
+    
+    # Create hash of email + time window
+    data = f"{email}:{window.isoformat()}"
+    return hashlib.sha256(data.encode()).hexdigest()
+
 def hello(request):
     return JsonResponse({"message": "Backend is working!"})
 
@@ -132,6 +153,7 @@ def search_view(request):
         'query': query,
         'message': 'Query logged successfully'
     })
+
 def get_voter_info(request):
     # Get address from query params
     address = request.GET.get("address", "").strip()
@@ -522,36 +544,46 @@ def me(request):
         "ok": True,
         "user": {
             "email": u.email,
-             "first_name": u.first_name,
+            "first_name": u.first_name,
             "last_name": u.last_name,
             "picture": u.picture,
         },
     })
-    
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
-import json
-from .models import ContactMessage  # Adjust import as needed
 
 @csrf_exempt
 @require_http_methods(["POST"])
 def submit_contact_form(request):
+    """
+    Handle contact form submissions with bloom filter cooldown.
+    """
     try:
         data = json.loads(request.body)
 
         first_name = data.get('first_name', '').strip()
         last_name = data.get('last_name', '').strip()
-        email = data.get('email', '').strip()
+        email = data.get('email', '').strip().lower()
         subject = data.get('subject', '').strip()
         message = data.get('message', '').strip()
 
+        # Validation
         if not all([first_name, last_name, email, subject, message]):
             return JsonResponse({
                 'success': False,
                 'error': 'All fields are required'
             }, status=400)
+        
+        submission_key = get_submission_key(email)
+        
+        if contact_cooldown_filter.contains(submission_key):
+            return JsonResponse({
+                'success': False,
+                'error': f'Please wait a few minutes beforesubmitting again',
+                'cooldown': True
+            }, status=429)
+        
+        contact_cooldown_filter.add(submission_key)
 
+        #save to database
         contact = ContactMessage.objects.create(
             first_name=first_name,
             last_name=last_name,
@@ -572,9 +604,8 @@ def submit_contact_form(request):
             'error': 'Invalid JSON'
         }, status=400)
 
-    except Exception:
+    except Exception as e:
         return JsonResponse({
             'success': False,
             'error': 'Server error'
         }, status=500)
-
