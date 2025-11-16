@@ -26,5 +26,5 @@ urlpatterns = [
     path("api/me", civic_views.me, name="me"),
     path('admin/', admin.site.urls),
     path("api/", include("civicapi.urls")),
-    
+
 ]
