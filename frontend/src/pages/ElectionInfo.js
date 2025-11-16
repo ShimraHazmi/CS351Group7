@@ -148,7 +148,7 @@ function ElectionInfo() {
                 <TabList onChange={handleChange}>
                   <Tab label="Upcoming Elections" value="1" />
                   <Tab label="Ballot Measures" value="2" />
-                  <Tab label="Voting Options" value="3" />
+                  {/* <Tab label="Voting Options" value="3" /> */}
                 </TabList>
               </Box>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useRecentActivity } from '../context/RecentActivityContext';
 import { FiSearch, FiFilter } from "react-icons/fi";
 import "../css/searchcandidates.css";
@@ -12,10 +12,41 @@ function SearchCandidates() {
   // Autocomplete state
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
-  const { addActivity } = useRecentActivity();
+  const { addActivity, items } = useRecentActivity();
+  const [hasSearched, setHasSearched] = useState(false);
 
-  const handleSearchCandidates = async () => {
-    if (!candidateQuery.trim()) {
+  // Compute top searched queries from RecentActivity (sum of meta.count)
+  const topSearches = useMemo(() => {
+    const map = {};
+    if (!items || items.length === 0) return [];
+    for (const it of items) {
+      if (it.action === 'search_candidates' && it.label) {
+        const key = it.label;
+        const c = it.meta && typeof it.meta.count === 'number' ? it.meta.count : 1;
+        map[key] = (map[key] || 0) + c;
+      }
+    }
+    return Object.entries(map)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([label, count]) => ({ label, count }));
+  }, [items]);
+
+  const FALLBACK_SUGGESTIONS = [
+    'Mikie Sherrill',
+    'Gary Harrop',
+    'Luanne Peterpaul',
+    'Paul Kanitra',
+    'Kennard Randolph',
+    'Khari Edwards'
+  ];
+
+  const [initialSuggestions, setInitialSuggestions] = useState([]);
+
+  // Accept an optional query param to avoid relying on stale state when calling from suggestions
+  const handleSearchCandidates = async (queryParam) => {
+    const query = (typeof queryParam === 'string' && queryParam.trim()) ? queryParam.trim() : candidateQuery.trim();
+    if (!query) {
       setError("Please enter a candidate name or office");
       return;
     }
@@ -25,7 +56,7 @@ function SearchCandidates() {
     setCandidateResults(null);
 
     try {
-      const params = new URLSearchParams({ query: candidateQuery.trim() });
+      const params = new URLSearchParams({ query });
       const response = await fetch(`http://localhost:8000/api/search-candidates/?${params.toString()}`);
       
       if (!response.ok) {
@@ -42,8 +73,8 @@ function SearchCandidates() {
           addActivity({
             type: 'search',
             action: 'search_candidates',
-            label: candidateQuery.trim(),
-            description: `Searched candidates "${candidateQuery.trim()}" — found ${count} candidate${count!==1? 's':''}${data.totalRaces? ` across ${data.totalRaces} race${data.totalRaces!==1? 's':''}`: ''}`,
+            label: query,
+            description: `Searched candidates "${query}" — found ${count} candidate${count!==1? 's':''}${data.totalRaces? ` across ${data.totalRaces} race${data.totalRaces!==1? 's':''}`: ''}`,
             meta: { count, totalRaces: data.totalRaces }
           });
         }
@@ -54,6 +85,8 @@ function SearchCandidates() {
       setError(err.message);
     } finally {
       setLoading(false);
+      // mark that a search has been performed (used to show Back button)
+      setHasSearched(true);
     }
   };
 
@@ -94,6 +127,44 @@ function SearchCandidates() {
     setAutocompleteSuggestions([]);
   };
 
+  const handleSuggestionClick = async (suggestion) => {
+    // set UI and run the search using the suggestion directly to avoid stale state issues
+    setCandidateQuery(suggestion);
+    await handleSearchCandidates(suggestion);
+  };
+
+  const candidateInputRef = useRef(null);
+
+  const handleBack = () => {
+    setCandidateQuery('');
+    setCandidateResults(null);
+    setError(null);
+    setShowAutocomplete(false);
+    setAutocompleteSuggestions([]);
+    // focus input for a smoother retry
+    if (candidateInputRef.current) candidateInputRef.current.focus();
+  };
+
+  // On mount, try to fetch initial popular candidate suggestions from the backend autocomplete endpoint
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchInitial() {
+      try {
+        const resp = await fetch('http://localhost:8000/api/autocomplete-candidates/?prefix=');
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (cancelled) return;
+        if (data && Array.isArray(data.suggestions) && data.suggestions.length > 0) {
+          setInitialSuggestions(data.suggestions.slice(0, 12));
+        }
+      } catch (e) {
+        // ignore network errors — we'll fall back to built-in suggestions
+      }
+    }
+    fetchInitial();
+    return () => { cancelled = true; };
+  }, []);
+
   return (
     <div className="search-candidates">
       <header><h2>Search Candidates</h2></header>
@@ -109,6 +180,7 @@ function SearchCandidates() {
           onFocus={() => {
             if (autocompleteSuggestions.length > 0) setShowAutocomplete(true);
           }}
+          ref={candidateInputRef}
         />
         <button 
           type="submit" 
@@ -118,6 +190,9 @@ function SearchCandidates() {
         >
           {loading ? "Searching..." : <FiSearch />}
         </button>
+        {hasSearched && (
+          <button type="button" className="back-button inline" onClick={handleBack} aria-label="Back to suggestions">← Back</button>
+        )}
         {/* <button type="button" className="filter-button">
           <FiFilter className="filter-icon" />
         </button> */}
@@ -158,6 +233,40 @@ function SearchCandidates() {
           </div>
         )}
       </div>
+
+      {/* Back button is now inline inside the search bar and only appears after a search */}
+
+      {/* Placeholder content when no query is entered */}
+      {(!candidateQuery || !candidateQuery.trim()) && (
+        <div className="candidates-placeholder">
+          <div className="placeholder-header">
+            <h3>Top searches</h3>
+            <p className="muted">Quick suggestions based on your recent activity or popular searches</p>
+          </div>
+
+          <div className="top-suggestions">
+            {topSearches && topSearches.length > 0 ? (
+              topSearches.map((s, idx) => (
+                <button key={idx} className="suggestion-chip" onClick={() => handleSuggestionClick(s.label)}>
+                  {s.label} <span className="chip-count">{s.count}</span>
+                </button>
+              ))
+            ) : initialSuggestions && initialSuggestions.length > 0 ? (
+              initialSuggestions.map((s, idx) => (
+                <button key={idx} className="suggestion-chip" onClick={() => handleSuggestionClick(s)}>
+                  {s}
+                </button>
+              ))
+            ) : (
+              FALLBACK_SUGGESTIONS.map((s, idx) => (
+                <button key={idx} className="suggestion-chip" onClick={() => handleSuggestionClick(s)}>
+                  {s}
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Display errors */}
       {error && (

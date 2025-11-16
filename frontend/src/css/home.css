@@ -143,3 +143,12 @@
 .stats-chart {
   width: 100%;
 }
+
+/* Scrollable results panel to avoid elongating the page */
+.search-results-panel {
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+}
