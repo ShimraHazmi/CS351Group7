@@ -132,7 +132,7 @@ function ContactUs() {
               gap: '10px'
             }}>
               <span style={{ fontSize: '20px' }}>⏱</span>
-              <span><strong>Please wait!</strong> {errorMessage}</span>
+              <span><strong>Please wait!</strong> {errorMessage ? errorMessage.replace(/beforesubmitting/gi, 'before submitting') : ''}</span>
             </div>
           )}
 
