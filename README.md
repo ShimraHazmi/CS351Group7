@@ -26,11 +26,7 @@ Hau Tran
 
 *Show off what your software looks like in action! Try to limit it to one-liners if possible and don't delve into API specifics.*
 
-```py
->>> import mypackage
->>> mypackage.do_stuff()
-'Oh yeah!'
-```
+[![Demo Video](thumbnail-image.png)]([https://your-video-link](https://drive.google.com/file/d/1swAl8dihO7RUIRJUwGqvC0M7e9Mux136/view?usp=sharing))
 
 
 ## ⬇️ Installation
