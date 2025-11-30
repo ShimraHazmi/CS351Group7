@@ -1,26 +1,26 @@
 # 🗽 CivicConnect
 
-(add your badges here)
-
-> *Your documentation is a direct reflection of your software, so hold it to the same standards.*
-
-
 ## 🌟 Highlights
 
-- Some functionality made easy!
-- This problem handled
-- etc.
+- Instant election insights across all 50 states with race details and ballot measures pulled from civicapi.org
+- High-speed candidate search from logging API results
+- Clear and Unified dashboard UI that gives easy access to login, voter info, and 
+help in one place
+- Django REST backend with SQLite to handle backend caching and API calls
+- React frontend using stylish reusable components and ready with WorkOS authenticator
 
 
 ## ℹ️ Overview
 
-A paragraph explaining your work, who you are, and why you made it.
+Young voters can stay informed without having to navigate between government websites thanks to CivicConnect, a full-stack civic data companion.  Calls to civicapi.org are coordinated by our Django API, which also caches results in SQLite and exposes clean endpoints for election timelines, ballot measures, and candidate lookups.  A Trie based autocomplete keeps searches fast even on mobile devices, and a React dashboard arranges everything into manageable tabs, from recent races and registration materials to impending election dates.  The objective is straightforward: provide communities, particularly young adults navigating a complex political environment, with a single, trustworthy source of up-to-date election information.
 
 
 ### ✍️ Authors
 
-Mention who you are and link to your GitHub or organization's website.
-
+Abrar Makki
+Shimra Hazmi
+Thuy Duong Pham
+Hau Tran
 
 ## 🚀 Usage
 
@@ -47,7 +47,3 @@ And be sure to specify any other minimum requirements like Python versions or op
 
 
 ## 💭 Feedback and Contributing
-
-Add a link to the Discussions tab in your repo and invite users to open issues for bugs/feature requests.
-
-This is also a great place to invite others to contribute in any ways that make sense for your project. Point people to your DEVELOPMENT and/or CONTRIBUTING guides if you have them.
