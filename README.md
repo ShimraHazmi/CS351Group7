@@ -1,4 +1,4 @@
-# 📦 My Package
+# 🗽 CivicConnect
 
 (add your badges here)
 
