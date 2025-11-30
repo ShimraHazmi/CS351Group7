@@ -35,15 +35,26 @@ Hau Tran
 
 ## ⬇️ Installation
 
-Simple, understandable installation instructions!
+Here are the instructions on running our website.
 
 ```bash
-pip install my-package
+# Backend
+cd backend
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+
+# Frontend
+cd ..\frontend
+npm install
 ```
 
-And be sure to specify any other minimum requirements like Python versions or operating systems.
+Minimum requirements for
+running the project:
 
-*You may be inclined to add development instructions here, don't.*
-
-
-## 💭 Feedback and Contributing
+- Python 3.12+
+- Node.js 18+
+- npm 10+
+- SQLite (bundled with Python on Windows)
+- civicapi.org API key (set via environment variable `CIVIC_API_KEY`)
