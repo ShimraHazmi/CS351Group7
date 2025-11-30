@@ -26,7 +26,7 @@ Hau Tran
 
 *Show off what your software looks like in action! Try to limit it to one-liners if possible and don't delve into API specifics.*
 
-[![Demo Video](demoVidThumbnail.jpg)]([https://your-video-link](https://drive.google.com/file/d/1swAl8dihO7RUIRJUwGqvC0M7e9Mux136/view?usp=sharing))
+[![Demo Video](demoVidThumbnail.jpg)](https://drive.google.com/file/d/1swAl8dihO7RUIRJUwGqvC0M7e9Mux136/view?usp=sharing)
 
 
 ## ⬇️ Installation
